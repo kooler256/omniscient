@@ -2,14 +2,15 @@
   "name": "omniscient",
   "version": "3.1.0",
   "description": "A library providing an abstraction for React components for passing the same data structure through the entire component flow using cursors and immutable data structures.",
-  "main": "component.js",
+  "main": "index.js",
   "directories": {
     "example": "example"
   },
   "dependencies": {
     "lodash.assign": "^3.0.0",
     "lodash.isequal": "^3.0.0",
-    "lodash.pick": "^3.0.0"
+    "lodash.pick": "^3.0.0",
+    "react-native": "^0.1.0"
   },
   "peerDependencies": {
     "react": ">=0.12.0 || >=0.13.0-beta"
