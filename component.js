@@ -1,7 +1,6 @@
 "use strict";
 
-var React  = require('react'),
-    assign = require('lodash.assign');
+var assign = require('lodash.assign');
 
 var shouldComponentUpdate = require('./shouldupdate');
 var cached = require('./cached');
