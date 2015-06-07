@@ -586,7 +586,7 @@ describe('component', function () {
         isCursor: isCursor
       });
 
-      localComponent.shouldComponentUpdate.isCursor.should.equal(isCursor);
+      localComponent.isCursor.should.equal(isCursor);
       var Component = localComponent(function () {
         return React.DOM.text(null, 'hello');
       });
@@ -600,7 +600,7 @@ describe('component', function () {
         isImmutable: isImmutable
       });
 
-      localComponent.shouldComponentUpdate.isImmutable.should.equal(isImmutable);
+      localComponent.isImmutable.should.equal(isImmutable);
       var Component = localComponent(function () {
         return React.DOM.text(null, 'hello');
       });

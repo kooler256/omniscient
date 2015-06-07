@@ -45,14 +45,12 @@ module.exports = factory();
  *   jsx: false, // whether or not to default to jsx components
  *   cursorField: '__singleCursor', // cursor property name to "unwrap" before passing in to render
  *   isNode: function(propValue), // determines if propValue is a valid React node
+ *   isCursor: function(maybeCursor), // Used to check if it should wrap object internally
+ *   isImmutable: function (maybeImmutable) // Used to check if it should wrap object internally
  *
  *   // Passed on to `shouldComponentUpdate`
- *   isCursor: function(cursor), // check if prop is cursor
- *   unCursor: function (cursor), // convert cursor to object
- *   isEqualCursor: function (oneCursor, otherCursor), // compares cursor
  *   isEqualState: function (currentState, nextState), // compares state
  *   isEqualProps: function (currentProps, nextProps), // compares props
- *   isImmutable: function (maybeImmutable) // check if object is immutable
  * }
  * ```
  *
@@ -98,13 +96,13 @@ function factory (options) {
   options = options || {};
   var _shouldComponentUpdate = options.shouldComponentUpdate ||
                                shouldComponentUpdate.withDefaults(options);
-  var _isCursor = options.isCursor || shouldComponentUpdate.isCursor;
-  var _isImmutable = options.isImmutable || shouldComponentUpdate.isImmutable;
+
+  var _isCursor = options.isCursor || isCursor;
+  var _isImmutable = options.isImmutable || isImmutable;
   var _isJsx = !!options.jsx;
   var _hiddenCursorField = options.cursorField || '__singleCursor';
   var _isNode = options.isNode || isNode;
   var _cached = cached.withDefaults(_shouldComponentUpdate);
-
 
   /**
    * Activate debugging for components. Will log when a component renders,
@@ -131,6 +129,8 @@ function factory (options) {
   ComponentCreator.debug = debugFn;
   ComponentCreator.cached = _cached;
   ComponentCreator.shouldComponentUpdate = _shouldComponentUpdate;
+  ComponentCreator.isCursor = _isCursor;
+  ComponentCreator.isImmutable = _isImmutable;
   return ComponentCreator;
 
   function ComponentCreator (displayName, mixins, render) {
@@ -274,6 +274,36 @@ function factory (options) {
       render: render
     };
   }
+}
+
+/**
+ * Predicate to check if a potential is an immutable structure or not.
+ * Override through `shouldComponentUpdate.withDefaults` to support different cursor
+ * implementations.
+ *
+ * @param {maybeImmutable} value to check if it is immutable.
+ *
+ * @module shouldComponentUpdate.isImmutable
+ * @returns {Boolean}
+ * @api public
+ */
+var IS_ITERABLE_SENTINEL = '@@__IMMUTABLE_ITERABLE__@@';
+function isImmutable(maybeImmutable) {
+  return !!(maybeImmutable && maybeImmutable[IS_ITERABLE_SENTINEL]);
+}
+
+/**
+ * Predicate to check if `potential` is Immutable cursor or not (defaults to duck testing
+ * Immutable.js cursors). Can override through `.withDefaults()`.
+ *
+ * @param {potential} potential to check if is cursor
+ *
+ * @module shouldComponentUpdate.isCursor
+ * @returns {Boolean}
+ * @api public
+ */
+function isCursor (potential) {
+  return !!(potential && typeof potential.deref === 'function');
 }
 
 function pickStaticMixins (mixins) {

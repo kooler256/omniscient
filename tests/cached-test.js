@@ -163,7 +163,7 @@ describe('cached', function () {
   it('should differ between cursor and immutable map', function (done) {
     var called = 0;
     var cursor = Cursor.from(Immutable.fromJS({x: 1}));
-    var map = Immutable.fromJS({x: 1});
+    var map = Immutable.fromJS({x: 2});
 
     var f = component.cached(function (input) {
       called = called + 1;

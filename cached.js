@@ -45,8 +45,7 @@ function factory (methods) {
   var isEqual = (methods && methods.isEqualProps) || shouldupdate.isEqualProps;
 
   return function cached (f) {
-    var input,
-        output;
+    var input, output;
 
     return function () {
       if (!isEqual(arguments, input)) {
