@@ -29,7 +29,7 @@
     "doxme": "git://github.com/mikaelbr/doxme#dev"
   },
   "scripts": {
-    "test": "mocha -R spec tests/**-test.js",
+    "test": "mocha -R dot tests/**-test.js",
     "test-watch": "mocha -G -w -R min tests/**-test.js",
     "dist": "node makeBundle.js",
     "build-docs": "cat component.js shouldupdate.js cached.js | dox -r | doxme > api.md"
