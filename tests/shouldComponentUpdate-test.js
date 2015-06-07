@@ -201,9 +201,23 @@ describe('shouldComponentUpdate', function () {
     });
 
     it('when children has changed', function () {
-      var data = Immutable.fromJS({ foo: 'bar' });
-
       shouldNotUpdate({
+        children: { foo: 'hello' },
+        nextChildren: { bar: 'bye' }
+      });
+    });
+
+    it('when neverUpdateFunctor has changed', function () {
+      shouldNotUpdate({
+        props: neverUpdateFunctor({ foo: 'hello' }),
+        nextProps: neverUpdateFunctor({ bar: 'bye' })
+      });
+    });
+
+    it('when neverUpdateFunctor or children has changed', function () {
+      shouldNotUpdate({
+        props: neverUpdateFunctor({ foo: 'hello' }),
+        nextProps: neverUpdateFunctor({ bar: 'bye' }),
         children: { foo: 'hello' },
         nextChildren: { bar: 'bye' }
       });
@@ -297,9 +311,7 @@ describe('shouldComponentUpdate', function () {
       });
 
       it('should have debug on product of withDefaults', function () {
-        var localComponent = shouldComponentUpdate.withDefaults({
-
-        });
+        var localComponent = shouldComponentUpdate.withDefaults({ });
         localComponent.debug.should.be.a('function');
       });
 
@@ -337,6 +349,17 @@ describe('shouldComponentUpdate', function () {
     });
   });
 });
+
+function neverUpdateFunctor (input) {
+  return {
+    valueOf: function () {
+      return input;
+    },
+    equals: function () {
+      return true;
+    }
+  };
+}
 
 function shouldNotUpdate (opts, fn) {
   callShouldUpdate(opts, fn).should.equal(false);
