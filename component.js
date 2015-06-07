@@ -94,8 +94,8 @@ module.exports.withDefaults = factory;
 function factory (options) {
   var debug;
   options = options || {};
-  var _shouldComponentUpdate = options.shouldComponentUpdate ||
-                               shouldComponentUpdate.withDefaults(options);
+  var shouldUpdateFn = shouldComponentUpdate.withDefaults(options);
+  var _shouldComponentUpdate = options.shouldComponentUpdate || shouldUpdateFn;
 
   var _isCursor = options.isCursor || isCursor;
   var _isImmutable = options.isImmutable || isImmutable;
@@ -128,9 +128,9 @@ function factory (options) {
    */
   ComponentCreator.debug = debugFn;
   ComponentCreator.cached = _cached;
-  ComponentCreator.shouldComponentUpdate = _shouldComponentUpdate;
-  ComponentCreator.isCursor = _isCursor;
-  ComponentCreator.isImmutable = _isImmutable;
+  ComponentCreator.shouldComponentUpdate = shouldUpdateFn;
+  ComponentCreator.isCursor = isCursor;
+  ComponentCreator.isImmutable = isImmutable;
   return ComponentCreator;
 
   function ComponentCreator (displayName, mixins, render) {

@@ -46,8 +46,8 @@ function factory (methods) {
   var _isEqualState  = methods.isEqualState || isEqualState,
       _isEqualProps  = methods.isEqualProps || isEqualProps;
 
-  shouldComponentUpdate.isEqualState = _isEqualState;
-  shouldComponentUpdate.isEqualProps = _isEqualProps;
+  shouldComponentUpdate.isEqualState = isEqualState;
+  shouldComponentUpdate.isEqualProps = isEqualProps;
   shouldComponentUpdate.debug = debugFn;
 
   return shouldComponentUpdate;
